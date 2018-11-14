@@ -2,7 +2,7 @@
 
 return [
     'web' => [
-        'first_recharge' => [
+        1 => [
             'id' => 1,
             'start' => 0,
             'end' => 0,
@@ -22,15 +22,47 @@ return [
                     'count' => 2
                 ],
             ]
+        ],
+        2 => [
+            'id' => 2,
+            'start' => 0,
+            'end' => 0,
+            'type' => 'shop',
+            'title' => 'Web Shop',
+            'description' => '',
+            'icon' => 0,
+            'params' => [
+                0 => [
+                    'type' => 'Items',
+                    'id' => 'ItemId0',
+                    'count' => 1,
+                    'price' => 5000,
+                    'limit' => 0
+                ],
+                1 => [
+                    'type' => 'Items',
+                    'id' => 'ItemId1',
+                    'count' => 5,
+                    'price' => 5000,
+                    'limit' => 10
+                ],
+                2 => [
+                    'type' => 'Items',
+                    'id' => 'ItemId2',
+                    'count' => 1,
+                    'price' => 10000,
+                    'limit' => 0
+                ],
+            ],
         ]
     ],
     's1' => [
-        'recharge' => [
+        1 => [
             'id' => 1,
             'start' => 0,
             'end' => 0,
             'type' => 'recharge',
-            'title' => '',
+            'title' => 'Accumulate Recharge',
             'description' => '',
             'icon' => 0,
             'params' => [
@@ -61,6 +93,7 @@ return [
                     ]
                 ],
             ]
-        ]
+        ],
+        
     ]
 ];

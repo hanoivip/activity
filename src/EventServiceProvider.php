@@ -11,6 +11,10 @@ class EventServiceProvider extends ServiceProvider
             'Hanoivip\Activity\Services\AccumulateRechargeService',
             'Hanoivip\Activity\Services\FirstRechargeService',
         ],
+        'Hanoivip\Events\Gate\UserTopup' => [
+            'Hanoivip\Activity\Services\AccumulateTopupService',
+            'Hanoivip\Activity\Services\FirstTopupService',
+        ],
     ];
 
     public function boot()

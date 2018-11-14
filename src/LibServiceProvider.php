@@ -3,6 +3,7 @@
 namespace Hanoivip\Activity;
 
 use Illuminate\Support\ServiceProvider;
+use Hanoivip\Activity\Services\ActivityDataService;
 
 class LibServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,9 @@ class LibServiceProvider extends ServiceProvider
     
     public function register()
     {
-        //$this->app->bind("IGift", GiftService::class);
+        if (config('activity.cfg') == 'array')
+            $this->app->bind('IActivityDataService', ActivityDataService::class);
+        //if (config('activity.cfg') == 'database')
+        //    $this->app->bind('IActivityDataService', ActivityDataService::class);
     }
 }

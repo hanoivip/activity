@@ -15,11 +15,26 @@ use Exception;
  */
 class ActivityManagerService
 {   
+    /**
+     * 
+     * @var string
+     */
     protected $group;
-    
+    /**
+     * 
+     * @var IPlatform
+     */
     protected $platform;
-    
+    /**
+     * 
+     * @var IActivityDataService
+     */
     protected $data;
+    /**
+     * 
+     * @var PlatformHelper
+     */
+    protected $helper;
     
     public function __construct(
         string $group, 
@@ -27,7 +42,7 @@ class ActivityManagerService
     {
         $this->group = $group;
         $this->platform = $platform;
-        $this->data = new ActivityDataService();
+        $this->data = app()->make('IActivityDataService');
         $this->helper = new PlatformHelper();
     }
     

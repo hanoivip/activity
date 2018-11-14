@@ -5,11 +5,12 @@ namespace Hanoivip\Activity\Controllers;
 use Hanoivip\Activity\Services\ActivityManagerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Exception;
-use Hanoivip\Activity\Services\ActivityDataService;
+use Hanoivip\Activity\Services\IActivityDataService;
 use Hanoivip\Platform\PlatformHelper;
 
-class ActivityController
+class ActivityController extends Controller
 {
     protected $activity;
     
@@ -18,7 +19,7 @@ class ActivityController
     protected $platformHelper;
     
     public function __contruct(
-        ActivityDataService $data,
+        IActivityDataService $data,
         PlatformHelper $helper)
     {
         $this->activityData = $data;
@@ -67,7 +68,7 @@ class ActivityController
         }
         catch (Exception $ex)
         {
-            
+            Log::error('Activity detail activities ex: ' . $ex->getMessage());
         }
         if ($request->ajax())
             return $activities;
@@ -93,7 +94,7 @@ class ActivityController
         }
         catch (Exception $ex)
         {
-            
+            Log::error('Activity get rewards ex: ' . $ex->getMessage());
         }
         if ($request->ajax())
             return $result;
@@ -115,7 +116,7 @@ class ActivityController
         }
         catch (Exception $ex)
         {
-            
+            Log::error('Activity get activity config ex: ' . $ex->getMessage());
         }
         if ($request->ajax())
             return $configs;

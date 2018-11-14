@@ -10,10 +10,10 @@ class CreateActivities extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('week')->comment('Định dạng: year@week. Ex: 2018@01');
+            $table->integer('activity_id')->comment('Activity config id');
             $table->integer('user_id');
-            $table->string('svname');
-            $table->integer('total_recharges');
+            $table->integer('role_id')->default(0);
+            $table->integer('current_recharge');
             $table->string('rewards')->comment('Các mốc đã được thưởng');
             $table->timestamps();
         });

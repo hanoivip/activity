@@ -2,7 +2,7 @@
 
 namespace Hanoivip\Activity\Services;
 // TODO: make use of protobuf
-class RewardIndex
+class Reward
 {
     public $type;
     public $id;
