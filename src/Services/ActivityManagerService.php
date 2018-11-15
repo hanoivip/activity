@@ -79,12 +79,13 @@ class ActivityManagerService
      * @param Authenticatable $user
      * @param string $type
      * @param number $index
+     * @param string $role
      * @return boolean
      */
-    public function reward($user, $type, $index)
+    public function reward($user, $type, $index, $role = null)
     {
         $service = $this->getServiceByType($type);
-        if (!$service->canUserGet($user->getAuthIdentifier(), $index))
+        if (!$service->canUserGet($user->getAuthIdentifier(), $index, $role))
         {
             return false;
         }

@@ -3,7 +3,6 @@
 namespace Hanoivip\Activity\Services;
 
 use Hanoivip\Events\Game\UserRecharge;
-use Illuminate\Support\Facades\DB;
 
 class AccumulateTopupService extends AbstractActivityService
 {
@@ -17,43 +16,43 @@ class AccumulateTopupService extends AbstractActivityService
             isset($event->params['roleid']) ? $event->params['roleid'] : null);
     }
     
-    public function canUserGet($uid, $indexOrAmount)
+    public function canUserGet($uid, $indexOrAmount, $role = null)
     {
-        
+        $current = $this->getCurrentRecharge($uid, $this->getActiveId(), $role);
+        if ($current < $indexOrAmount)
+            return false;
+        $record = $this->getRecord($uid, $this->getActiveId(), $role);
+        $rewards = json_decode($record->rewards, true);
+        if (!empty($rewards))
+        {
+            return !isset($rewards[$indexOrAmount]);
+        }
+        return true;
     }
 
-    public function canUserBuy($uid, $indexOrAmount)
+    public function canUserBuy($uid, $indexOrAmount, $role = null)
     {
         return false;
     }
 
-    public function hasGotReward($uid, $indexOrAmount)
+    public function hasGotReward($uid, $indexOrAmount, $role = null)
     {
-        
+        $record = $this->getRecord($uid, $this->getActiveId(), $role);
+        $rewards = json_decode($record->rewards, true);
+        if (!empty($rewards))
+        {
+            return isset($rewards[$indexOrAmount]);
+        }
+        return false;
     }
 
     public function onUserProgress($uid, $amount, $role = null)
     {
         $activity = $this->activityData->getConfig($this->platform, self::TYPE_NAME, true);
-        $table = $this->getTableName();
-        if (empty($role))
-            $record = DB::table($table)
-            ->where('user_id', $uid)
-            ->where('activity_id', $activity['id'])
-            ->first();
-        else
-            $record = DB::table($table)
-            ->where('user_id', $uid)
-            ->where('activity_id', $activity['id'])
-            ->where('role_id', $role)
-            ->first();
+        $record = $this->getRecord($uid, $activity['id'], $role);
         if ($record->isEmpty())
         {
-            $record = $this->getRecord();
-            $record->user_id = $uid;
-            $record->activity_id = $activity['id'];
-            if (!empty($role))
-                $record->role_id = $role;
+            $record = $this->newRecord($uid, $activity['id'], $role);
             $record->current_recharge = $amount;
             $record->rewards = '[]';
             $record->save();
@@ -65,30 +64,11 @@ class AccumulateTopupService extends AbstractActivityService
         }
     }
     
-    private function getCurrentRecharge($uid, $role = null)
-    {
-        $activity = $this->activityData->getConfig($this->platform, self::TYPE_NAME, true);
-        $table = $this->getTableName();
-        if (empty($role))
-            $record = DB::table($table)
-            ->where('user_id', $uid)
-            ->where('activity_id', $activity['id'])
-            ->first();
-        else
-            $record = DB::table($table)
-            ->where('user_id', $uid)
-            ->where('activity_id', $activity['id'])
-            ->where('role_id', $role)
-            ->first();
-        if ($record->isEmpty())
-            return 0;
-        else
-            return $record->current_recharge;
-    }
+    
 
     public function getUserProgress($uid, $role = null)
     {
-        $activity = $this->activityData->getConfig($this->platform, self::TYPE_NAME, true);
+        $activity = $this->getActive();
         $progress = [];
         foreach ($activity['params'] as $amount => $rewards)
         {
@@ -102,6 +82,12 @@ class AccumulateTopupService extends AbstractActivityService
         }
         return $progress;
     }
+    
+    protected function getType()
+    {
+        return self::TYPE_NAME;
+    }
+
 
 
 }

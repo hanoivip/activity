@@ -23,17 +23,17 @@ interface IActivityLogic
      * @param number $uid
      * @param number $index
      */
-    public function canUserGet($uid, $index);
+    public function canUserGet($uid, $index, $role = null);
     /**
      * 
      * @param number $uid
      * @param number $index
      */
-    public function hasGotReward($uid, $index);
+    public function hasGotReward($uid, $index, $role = null);
     /**
      *
      * @param number $uid
      * @param number $index
      */
-    public function canUserBuy($uid, $index);
+    public function canUserBuy($uid, $index, $role = null);
 }

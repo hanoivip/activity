@@ -73,7 +73,7 @@ class ActivityController extends Controller
         if ($request->ajax())
             return $activities;
         else
-            return view('hanoivip:activities', ['activities' => $activities]);
+            return view('hanoivip:activity-group-detail', ['activities' => $activities]);
     }
     
     /**
