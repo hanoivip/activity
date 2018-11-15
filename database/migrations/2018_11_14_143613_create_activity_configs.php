@@ -15,7 +15,7 @@ class CreateActivityConfigs extends Migration
             $table->string('title');
             $table->string('description');
             $table->integer('icon')->default(0);
-            $table->string('params', 20000);
+            $table->string('params', 10000);
             $table->timestamps();
         });
     }

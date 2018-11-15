@@ -9,16 +9,15 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 use Hanoivip\Activity\Services\IActivityDataService;
 use Hanoivip\Platform\PlatformHelper;
+use Hanoivip\Activity\Services\ArrayDataService;
 
 class ActivityController extends Controller
 {
-    protected $activity;
-    
     protected $activityData;
     
     protected $platformHelper;
     
-    public function __contruct(
+    public function __construct(
         IActivityDataService $data,
         PlatformHelper $helper)
     {

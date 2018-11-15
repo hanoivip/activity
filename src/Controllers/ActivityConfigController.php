@@ -3,7 +3,7 @@
 namespace Hanoivip\Activity\Controllers;
 
 
-class ActivityController extends Controller
+class ActivityConfigController extends Controller
 {
     
 }

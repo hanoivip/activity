@@ -5,6 +5,7 @@ namespace Hanoivip\Activity;
 use Illuminate\Support\ServiceProvider;
 use Hanoivip\Activity\Services\ArrayDataService;
 use Hanoivip\Activity\Services\DbDataService;
+use Hanoivip\Activity\Services\IActivityDataService;
 
 class LibServiceProvider extends ServiceProvider
 {
@@ -23,9 +24,10 @@ class LibServiceProvider extends ServiceProvider
     
     public function register()
     {
-        if (config('activity.cfg') == 'array')
-            $this->app->bind('IActivityDataService', ArrayDataService::class);
-        if (config('activity.cfg') == 'database')
-            $this->app->bind('IActivityDataService', DbDataService::class);
+        $this->app->bind(IActivityDataService::class, ArrayDataService::class);
+        //if (config('activity.cfg') == 'array')
+        //    $this->app->bind('IActivityDataService', ArrayDataService::class);
+        //if (config('activity.cfg') == 'database')
+        //    $this->app->bind('IActivityDataService', DbDataService::class);
     }
 }
