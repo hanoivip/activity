@@ -78,7 +78,18 @@ class AccumulateTopupService extends AbstractActivityService
             $index->price = 0;
             $index->canReceived = $this->canUserGet($uid, $amount, $role);
             $index->received = $this->hasGotReward($uid, $amount, $role);
-            $progress[$amount] = $index;
+            if (empty($role))
+            {
+                if (!isset($progress[0]))
+                    $progress[0] = [];
+                $progress[0][$amount] = $index;
+            }
+            else
+            {
+                if (!isset($progress[$role]))
+                    $progress[$role] = [];
+                $progress[$role][$amount] = $index;
+            }
         }
         return $progress;
     }

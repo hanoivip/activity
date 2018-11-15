@@ -1,11 +1,17 @@
 @extends('hanoivip::layouts.app')
 
-@section('title', 'Nhóm hoạt động')
+@section('title', 'Nhận thưởng từ hoạt động')
 
 @section('content')
 
-@if (empty($groups))
+@if (empty($error))
+<p>Lỗi: {{ $error }}</p>
+@endif
+
+@if ($result)
+<p>{{ __('activity.reward.success') }}</p>
 @else
+<p>{{ __('activity.reward.fail') }}</p>
 @endif
 
 @endsection

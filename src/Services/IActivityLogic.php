@@ -15,7 +15,7 @@ interface IActivityLogic
      * 
      * @param number $uid
      * @param string $role
-     * @return array index => array of RewardIndex
+     * @return array index => array ( role => RewardIndex )
      */
     public function getUserProgress($uid, $role = null);
     /**

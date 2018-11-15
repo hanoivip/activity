@@ -39,7 +39,7 @@ class ActivityController extends Controller
     {
         $groups = $this->activityData->activeGroup();
         if ($request->ajax())
-            return $groups;
+            return ['groups' => $groups];
         else 
             return view('hanoivip:activity-group', ['groups' => $groups]);
     }
@@ -61,9 +61,12 @@ class ActivityController extends Controller
     {
         $group = $request->input('group');
         $user = Auth::user();
+        $activities = [];
+        $configs = [];
         try
         {
             $service = $this->getActivityService($group);
+            $configs = $this->activityData->getConfig($group);
             $activities = $service->detail($user);
         }
         catch (Exception $ex)
@@ -71,9 +74,10 @@ class ActivityController extends Controller
             Log::error('Activity detail activities ex: ' . $ex->getMessage());
         }
         if ($request->ajax())
-            return $activities;
+            return ['configs' => $configs, 'activities' => $activities];
         else
-            return view('hanoivip:activity-group-detail', ['activities' => $activities]);
+            return view('hanoivip:activity-group-detail', 
+                ['configs' => $configs, 'activities' => $activities]);
     }
     
     /**
@@ -87,19 +91,25 @@ class ActivityController extends Controller
         $type = $request->input('type');
         $index = $request->input('index');
         $user = Auth::user();
+        $result = false;
+        $error = null;
         try
         {
+            $role = null;
+            if ($request->has('role'))
+                $role = $request->input('role');
             $service = $this->getActivityService($group);
-            $result = $service->reward($user, $type, $index);
+            $result = $service->reward($user, $type, $index, $role);
         }
         catch (Exception $ex)
         {
             Log::error('Activity get rewards ex: ' . $ex->getMessage());
+            $error = __('activity.reward.exception');
         }
         if ($request->ajax())
-            return $result;
+            return [ 'result' => $result, 'error' => $error];
         else
-            return view('hanoivip:activity-reward', ['result' => $result]);
+            return view('hanoivip:activity-reward', [ 'result' => $result, 'error' => $error]);
     }
     
     /**

@@ -6,25 +6,23 @@ use Hanoivip\Events\Game\UserRecharge;
 
 class AccumulateRechargeService extends AbstractActivityService
 {
-    const TYPE_NAME = 'recharge';
-    
-    public function handle(UserRecharge $event)
-    {
-        
-    }
-    public function canUserGet($uid, $index)
+    public function canUserGet($uid, $index, $role = null)
     {}
 
-    public function canUserBuy($uid, $index)
+    public function canUserBuy($uid, $index, $role = null)
     {}
 
-    public function hasGotReward($uid, $index)
+    public function hasGotReward($uid, $index, $role = null)
     {}
 
-    public function onUserProgress($uid, $amount)
+    protected function getType()
     {}
 
-    public function getUserProgress($uid)
+    public function onUserProgress($uid, $amount, $role = null)
     {}
+
+    public function getUserProgress($uid, $role = null)
+    {}
+
 
 }

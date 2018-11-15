@@ -13,29 +13,19 @@ class FirstRechargeService extends AbstractActivityService
     {
         if ($this->targetWebPlatform())
             return;
-        $activity = $this->activityData->getConfig($this->platform, self::TYPE_NAME);
-        // Check exists
-        $record = DB::table($this->getTableName())
-            ->where('activity_id', $activity['id'])
-            ->where('user_id', $event->uid)
-            ->first();
+        $role = isset($event->params['roleid']) ? $event->params['roleid'] : 0;
+        $record = $this->getRecord($event->uid, $this->getActiveId(), $role);
         if ($record->isEmpty())
         {
-            $record = $this->getRecord();
-            $record->user_id = $event->uid;
-            $record->activity_id = $activity['id'];
+            $record = $this->newRecord($event->uid, $this->getActiveId(), $role);
             $record->current_recharge = $event->coin;
             $record->save();
         }
     }
     
-    public function canUserGet($uid, $index)
+    public function canUserGet($uid, $index, $role = null)
     {
-        $activity = $this->activityData->getConfig($this->platform, self::TYPE_NAME);
-        $record = DB::table($this->getTableName())
-        ->where('activity_id', $activity['id'])
-        ->where('user_id', $uid)
-        ->first();
+        $record = $this->getRecord($uid, $this->getActiveId(), $role);
         if ($record->isNotEmpty())
         {
             $rewards = json_decode($record->rewards, true);
@@ -44,16 +34,16 @@ class FirstRechargeService extends AbstractActivityService
         return false;
     }
 
-    public function canUserBuy($uid, $index)
+    public function canUserBuy($uid, $index, $role = null)
     {
         return false;
     }
 
-    public function onUserProgress($uid, $amount)
+    public function onUserProgress($uid, $amount, $role = null)
     {}
 
     // TODO: move to abstract
-    public function getUserProgress($uid)
+    public function getUserProgress($uid, $role = null)
     {
         $index = new RewardIndex();
         $index->amountOrIndex = 0;
@@ -61,15 +51,25 @@ class FirstRechargeService extends AbstractActivityService
         $index->canReceived = $this->canUserGet($uid, 0);
         $index->price = 0;
         $index->received = $this->hasGotReward($uid, 0);
+        $progress = [];
+        if (empty($role))
+        {
+            if (!isset($progress[0]))
+                $progress[0] = [];
+                $progress[0][0] = $index;
+        }
+        else
+        {
+            if (!isset($progress[$role]))
+                $progress[$role] = [];
+                $progress[$role][0] = $index;
+        }
+        return $progress;
     }
     
-    public function hasGotReward($uid, $index)
+    public function hasGotReward($uid, $index, $role = null)
     {
-        $activity = $this->activityData->getConfig($this->platform, self::TYPE_NAME);
-        $record = DB::table($this->getTableName())
-        ->where('activity_id', $activity['id'])
-        ->where('user_id', $uid)
-        ->first();
+        $record = $this->getRecord($uid, $this->getActiveId(), $role);
         if ($record->isNotEmpty())
         {
             $rewards = json_decode($record->rewards, true);
@@ -77,6 +77,12 @@ class FirstRechargeService extends AbstractActivityService
         }
         return false;
     }
+    
+    protected function getType()
+    {
+        return self::TYPE_NAME;
+    }
+
 
 
 }
