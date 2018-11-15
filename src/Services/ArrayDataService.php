@@ -43,11 +43,12 @@ class ArrayDataService implements IActivityDataService
             {
                 if ($detail['type'] == $type)
                 {
-                    if ($ontime)
+                    if ($ontime && 
+                        $detail['start'] > 0 && 
+                        $detail['end'] > 0)
                     {
                         $now = date();
-                        if ($detail['start'] > 0 && $detail['end'] > 0 &&
-                            $now >= $detail['start'] && $now < $detail['end'])
+                        if ($now >= $detail['start'] && $now < $detail['end'])
                             return detail;
                     }
                     else

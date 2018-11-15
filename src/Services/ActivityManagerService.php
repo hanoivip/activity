@@ -49,20 +49,29 @@ class ActivityManagerService
     /**
      * 
      * @param Authenticatable $user
-     * @param array Array of RewardIndex
+     * @param array Array of RewardIndex, Group By Role, If any
      */
     public function detail($user)
     {
         $uid = $user->getAuthIdentifier();
         $activities = $this->data->getConfig($this->group);
-        $detail = [];
+        $groupByRole = [];
         foreach ($activities as $activity)
         {
             $type = $activity['type'];
             $service = $this->getServiceByType($type);
-            $detail[$type] = $service->getUserProgress($uid);
+            $detail = $service->getUserProgress($uid);
+            if (!empty($detail))
+            {
+                foreach ($detail as $role => $roleActivities)
+                {
+                    if (!isset($groupByRole[$role]))
+                        $groupByRole[$role] = [];
+                    array_push($groupByRole[$role], $roleActivities);
+                }
+            }
         }
-        return $detail;
+        return $groupByRole;
     }
     
     /**

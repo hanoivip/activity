@@ -31,7 +31,7 @@
 		"laravel" : {
 			"providers" : [
 				"Hanoivip\\Activity\\LibServiceProvider",
-				"Hanoivip\\Activity\\EventServiceProvider",
+				"Hanoivip\\Activity\\EventServiceProvider"
 			]
 		}
 	}
