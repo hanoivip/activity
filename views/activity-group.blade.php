@@ -1,4 +1,4 @@
-@extends('hanoivip::layouts.app')
+@extends('hanoivip::layouts.app-test')
 
 @section('title', 'Nhóm hoạt động')
 

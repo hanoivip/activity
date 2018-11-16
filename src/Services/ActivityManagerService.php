@@ -4,6 +4,7 @@ namespace Hanoivip\Activity\Services;
 
 use Hanoivip\Platform\Contracts\IPlatform;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Log;
 use Hanoivip\Platform\PlatformHelper;
 use Exception;
 
@@ -38,11 +39,12 @@ class ActivityManagerService
     
     public function __construct(
         string $group, 
-        IPlatform $platform)
+        IPlatform $platform,
+        IActivityDataService $data)
     {
         $this->group = $group;
         $this->platform = $platform;
-        $this->data = app()->make('IActivityDataService');
+        $this->data = $data;
         $this->helper = new PlatformHelper();
     }
     
@@ -60,6 +62,8 @@ class ActivityManagerService
         {
             $type = $activity['type'];
             $service = $this->getServiceByType($type);
+            if (empty($service))
+                continue;
             $detail = $service->getUserProgress($uid);
             if (!empty($detail))
             {
@@ -67,7 +71,9 @@ class ActivityManagerService
                 {
                     if (!isset($groupByRole[$role]))
                         $groupByRole[$role] = [];
-                    array_push($groupByRole[$role], $roleActivities);
+                    if (!isset($groupByRole[$role][$type]))
+                        $groupByRole[$role][$type] = [];
+                    array_push($groupByRole[$role][$type], $roleActivities);
                 }
             }
         }
@@ -115,11 +121,11 @@ class ActivityManagerService
         switch ($name)
         {
             case 'first_recharge':
-                return new FirstRechargeService($this->group, $this->platform);
+                return new FirstRechargeService($this->group, $this->data);
             case 'recharge':
-                return new AccumulateRechargeService($this->group, $this->platform);
+                return new AccumulateRechargeService($this->group, $this->data);
             default:
-                throw new Exception("ActivityManager type {$name} not supported!");
+                Log::error("ActivityManager type {$name} not supported!");
         }
     }
 }

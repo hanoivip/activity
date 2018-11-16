@@ -2,27 +2,15 @@
 
 namespace Hanoivip\Activity\Services;
 
-use Hanoivip\Events\Game\UserRecharge;
+use Hanoivip\Events\Gate\UserTopup;
 
-class AccumulateRechargeService extends AbstractActivityService
+class AccumulateTopupService extends AccumulateRechargeService
 {
-    public function canUserGet($uid, $index, $role = null)
-    {}
-
-    public function canUserBuy($uid, $index, $role = null)
-    {}
-
-    public function hasGotReward($uid, $index, $role = null)
-    {}
-
-    protected function getType()
-    {}
-
-    public function onUserProgress($uid, $amount, $role = null)
-    {}
-
-    public function getUserProgress($uid, $role = null)
-    {}
-
-
+    public function handle(UserTopup $event)
+    {
+        if ($this->targetGamePlatform())
+            return;
+        $this->onUserProgress($event->uid, $event->coin,
+            isset($event->params['roleid']) ? $event->params['roleid'] : null);
+    }
 }

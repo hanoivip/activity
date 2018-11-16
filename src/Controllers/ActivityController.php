@@ -40,7 +40,7 @@ class ActivityController extends Controller
         if ($request->ajax())
             return ['groups' => $groups];
         else 
-            return view('hanoivip:activity-group', ['groups' => $groups]);
+            return view('hanoivip::activity-group', ['groups' => $groups]);
     }
     
     private function getActivityService($group)
@@ -48,7 +48,7 @@ class ActivityController extends Controller
         $table = config('activity.' . $group . '.table');
         $platformName = config('activity.' . $group . '.platform');
         $platform = $this->platformHelper->getPlatform($platformName);
-        return new ActivityManagerService($table, $platform);
+        return new ActivityManagerService($platformName, $platform, $this->activityData);
     }
     
     /**
@@ -75,7 +75,7 @@ class ActivityController extends Controller
         if ($request->ajax())
             return ['configs' => $configs, 'activities' => $activities];
         else
-            return view('hanoivip:activity-group-detail', 
+            return view('hanoivip::activity-group-detail', 
                 ['configs' => $configs, 'activities' => $activities]);
     }
     
@@ -108,7 +108,7 @@ class ActivityController extends Controller
         if ($request->ajax())
             return [ 'result' => $result, 'error' => $error];
         else
-            return view('hanoivip:activity-reward', [ 'result' => $result, 'error' => $error]);
+            return view('hanoivip::activity-reward', [ 'result' => $result, 'error' => $error]);
     }
     
     /**
@@ -130,6 +130,6 @@ class ActivityController extends Controller
         if ($request->ajax())
             return $configs;
         else
-            return view('hanoivip:activity-configs', ['configs' => $configs]);
+            return view('hanoivip::activity-configs', ['configs' => $configs]);
     }
 }

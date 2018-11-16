@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\DB;
 abstract class AbstractActivityService implements IActivityLogic
 {
     /**
-     * 
+     * Group
      * @var string
      */
-    protected $platform;
+    protected $group;
     /**
      * 
      * @var IActivityDataService
@@ -24,13 +24,19 @@ abstract class AbstractActivityService implements IActivityLogic
      */
     protected $helper;
     
-    public function __construct($platform, $data)
+    public function __construct($group, $data)
     {
-        $this->platform = $platform;
+        $this->group = $group;
         $this->activityData = $data;
         $this->helper = new PlatformHelper();
     }
-    
+    /**
+     * 
+     * @param number $uid
+     * @param number $activityId
+     * @param string $role
+     * @return \Hanoivip\Activity\Models\Activity
+     */
     protected function newRecord($uid, $activityId, $role = null)
     {
         $table = $this->getTableName();
@@ -43,7 +49,13 @@ abstract class AbstractActivityService implements IActivityLogic
         $record->save();
         return $record;
     }
-    
+    /**
+     * 
+     * @param number $uid
+     * @param number $activityId
+     * @param string $role
+     * @return Activity|NULL
+     */
     protected function getRecord($uid, $activityId, $role = null)
     {
         $table = $this->getTableName();
@@ -63,17 +75,17 @@ abstract class AbstractActivityService implements IActivityLogic
     
     protected function getTableName()
     {
-        return config('activity.' . $this->platform . '.platform');
+        return config('activity.' . $this->group . '.table');
     }
     
     protected function targetWebPlatform()
     {
-        return strpos("web", $this->platform) !== false;
+        return strpos("web", $this->group) !== false;
     }
     
     protected function targetGamePlatform()
     {
-        return strpos("game", $this->platform) !== false;
+        return strpos("game", $this->group) !== false;
     }
     
     protected abstract function getType();
@@ -81,7 +93,7 @@ abstract class AbstractActivityService implements IActivityLogic
     protected function getActive()
     {
         $type = $this->getType();
-        return $this->activityData->getConfig($this->platform, $type, true);
+        return $this->activityData->getConfig($this->group, $type, true);
     }
     /**
      * Lấy ID hoạt động đang được kích hoạt tương ứng
@@ -96,7 +108,7 @@ abstract class AbstractActivityService implements IActivityLogic
     protected function getCurrentRecharge($uid, $activityId, $role = null)
     {
         $record = $this->getRecord($uid, $activityId, $role);
-        if ($record->isEmpty())
+        if (empty($record))
             return 0;
         else
             return $record->current_recharge;

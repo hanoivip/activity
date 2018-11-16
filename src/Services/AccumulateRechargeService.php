@@ -4,7 +4,7 @@ namespace Hanoivip\Activity\Services;
 
 use Hanoivip\Events\Game\UserRecharge;
 
-class AccumulateTopupService extends AbstractActivityService
+class AccumulateRechargeService extends AbstractActivityService
 {
     const TYPE_NAME = 'recharge';
     
@@ -22,6 +22,8 @@ class AccumulateTopupService extends AbstractActivityService
         if ($current < $indexOrAmount)
             return false;
         $record = $this->getRecord($uid, $this->getActiveId(), $role);
+        if (empty($record))
+            return false;
         $rewards = json_decode($record->rewards, true);
         if (!empty($rewards))
         {
@@ -38,6 +40,8 @@ class AccumulateTopupService extends AbstractActivityService
     public function hasGotReward($uid, $indexOrAmount, $role = null)
     {
         $record = $this->getRecord($uid, $this->getActiveId(), $role);
+        if (empty($record))
+            return false;
         $rewards = json_decode($record->rewards, true);
         if (!empty($rewards))
         {
@@ -50,7 +54,7 @@ class AccumulateTopupService extends AbstractActivityService
     {
         $activity = $this->activityData->getConfig($this->platform, self::TYPE_NAME, true);
         $record = $this->getRecord($uid, $activity['id'], $role);
-        if ($record->isEmpty())
+        if (empty($record))
         {
             $record = $this->newRecord($uid, $activity['id'], $role);
             $record->current_recharge = $amount;
@@ -68,6 +72,8 @@ class AccumulateTopupService extends AbstractActivityService
 
     public function getUserProgress($uid, $role = null)
     {
+        if (empty($role))
+            $role = 0;
         $activity = $this->getActive();
         $progress = [];
         foreach ($activity['params'] as $amount => $rewards)
@@ -78,18 +84,9 @@ class AccumulateTopupService extends AbstractActivityService
             $index->price = 0;
             $index->canReceived = $this->canUserGet($uid, $amount, $role);
             $index->received = $this->hasGotReward($uid, $amount, $role);
-            if (empty($role))
-            {
-                if (!isset($progress[0]))
-                    $progress[0] = [];
-                $progress[0][$amount] = $index;
-            }
-            else
-            {
-                if (!isset($progress[$role]))
-                    $progress[$role] = [];
-                $progress[$role][$amount] = $index;
-            }
+            if (!isset($progress[$role]))
+                $progress[$role] = [];
+            $progress[$role][$amount] = $index;
         }
         return $progress;
     }

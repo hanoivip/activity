@@ -9,7 +9,7 @@ return [
     // If not defined, group will be deactived
     // Common platform name: web, s1, s2 ...
     'web' => [ 
-        'table' => 'activity',
+        'table' => 'activities',
         'platform' => 'web'
         ]
 ];

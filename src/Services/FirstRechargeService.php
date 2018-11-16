@@ -15,7 +15,7 @@ class FirstRechargeService extends AbstractActivityService
             return;
         $role = isset($event->params['roleid']) ? $event->params['roleid'] : 0;
         $record = $this->getRecord($event->uid, $this->getActiveId(), $role);
-        if ($record->isEmpty())
+        if (empty($record))
         {
             $record = $this->newRecord($event->uid, $this->getActiveId(), $role);
             $record->current_recharge = $event->coin;
@@ -26,7 +26,7 @@ class FirstRechargeService extends AbstractActivityService
     public function canUserGet($uid, $index, $role = null)
     {
         $record = $this->getRecord($uid, $this->getActiveId(), $role);
-        if ($record->isNotEmpty())
+        if (!empty($record))
         {
             $rewards = json_decode($record->rewards, true);
             return empty($rewards);
@@ -70,7 +70,7 @@ class FirstRechargeService extends AbstractActivityService
     public function hasGotReward($uid, $index, $role = null)
     {
         $record = $this->getRecord($uid, $this->getActiveId(), $role);
-        if ($record->isNotEmpty())
+        if (!empty($record))
         {
             $rewards = json_decode($record->rewards, true);
             return !empty($rewards);

@@ -24,10 +24,10 @@ class LibServiceProvider extends ServiceProvider
     
     public function register()
     {
-        $this->app->bind(IActivityDataService::class, ArrayDataService::class);
-        //if (config('activity.cfg') == 'array')
-        //    $this->app->bind('IActivityDataService', ArrayDataService::class);
-        //if (config('activity.cfg') == 'database')
-        //    $this->app->bind('IActivityDataService', DbDataService::class);
+        //$this->app->bind(IActivityDataService::class, ArrayDataService::class);
+        if (config('activity.cfg') == 'array')
+            $this->app->bind(IActivityDataService::class, ArrayDataService::class);
+        if (config('activity.cfg') == 'database')
+            $this->app->bind(IActivityDataService::class, DbDataService::class);
     }
 }

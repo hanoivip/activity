@@ -2,29 +2,21 @@
 
 namespace Hanoivip\Activity\Services;
 
-use Hanoivip\Events\Game\UserRecharge;
-use Illuminate\Support\Facades\DB;
+use Hanoivip\Events\Gate\UserTopup;
 
 class FirstTopupService extends FirstRechargeService
 {
-    public function handle(UserRecharge $event)
+    public function handle(UserTopup $event)
     {
-        if ($this->targetGamePlatform())
+        if ($this->targetWebPlatform())
             return;
-        $activity = $this->activityData->getActive(self::TYPE_NAME);
-        // Check exists
-        $record = DB::table($this->getTableName())
-        ->where('activity_id', $activity['id'])
-        ->where('user_id', $event->uid)
-        ->first();
-        if ($record->isEmpty())
+        $role = isset($event->params['roleid']) ? $event->params['roleid'] : 0;
+        $record = $this->getRecord($event->uid, $this->getActiveId(), $role);
+        if (empty($record))
         {
-            $record = $this->getRecord();
-            $record->user_id = $event->uid;
-            $record->activity_id = $activity['id'];
+            $record = $this->newRecord($event->uid, $this->getActiveId(), $role);
             $record->current_recharge = $event->coin;
             $record->save();
         }
     }
-
 }
