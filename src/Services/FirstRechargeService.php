@@ -2,26 +2,9 @@
 
 namespace Hanoivip\Activity\Services;
 
-use Hanoivip\Events\Game\UserRecharge;
-use Illuminate\Support\Facades\DB;
-
 class FirstRechargeService extends AbstractActivityService
 {
     const TYPE_NAME = 'first_recharge';
-    
-    public function handle(UserRecharge $event)
-    {
-        if ($this->targetWebPlatform())
-            return;
-        $role = isset($event->params['roleid']) ? $event->params['roleid'] : 0;
-        $record = $this->getRecord($event->uid, $this->getActiveId(), $role);
-        if (empty($record))
-        {
-            $record = $this->newRecord($event->uid, $this->getActiveId(), $role);
-            $record->current_recharge = $event->coin;
-            $record->save();
-        }
-    }
     
     public function canUserGet($uid, $index, $role = null)
     {
@@ -40,7 +23,15 @@ class FirstRechargeService extends AbstractActivityService
     }
 
     public function onUserProgress($uid, $amount, $role = null)
-    {}
+    {
+        $record = $this->getRecord($uid, $this->getActiveId(), $role);
+        if (empty($record))
+        {
+            $record = $this->newRecord($uid, $this->getActiveId(), $role);
+            $record->current_recharge = $amount;
+            $record->save();
+        }
+    }
 
     // TODO: move to abstract
     public function getUserProgress($uid, $role = null)

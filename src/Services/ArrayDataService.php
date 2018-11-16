@@ -58,5 +58,12 @@ class ArrayDataService implements IActivityDataService
         }
         return $cfg;
     }
+    
+    public function getWebGroups()
+    {}
+
+    public function getGameGroups()
+    {}
+
 
 }

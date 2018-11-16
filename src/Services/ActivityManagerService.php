@@ -4,9 +4,7 @@ namespace Hanoivip\Activity\Services;
 
 use Hanoivip\Platform\Contracts\IPlatform;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Log;
 use Hanoivip\Platform\PlatformHelper;
-use Exception;
 
 /**
  * Index-Rewards activities
@@ -36,6 +34,11 @@ class ActivityManagerService
      * @var PlatformHelper
      */
     protected $helper;
+    /**
+     * 
+     * @var ActivityBuilder
+     */
+    protected $builder;
     
     public function __construct(
         string $group, 
@@ -46,6 +49,7 @@ class ActivityManagerService
         $this->platform = $platform;
         $this->data = $data;
         $this->helper = new PlatformHelper();
+        $this->builder = new ActivityBuilder();
     }
     
     /**
@@ -113,19 +117,11 @@ class ActivityManagerService
     
     /**
      * 
-     * @param string $name
+     * @param string $type
      * @return IActivityLogic
      */
-    private function getServiceByType($name)
+    private function getServiceByType($type)
     {
-        switch ($name)
-        {
-            case 'first_recharge':
-                return new FirstRechargeService($this->group, $this->data);
-            case 'recharge':
-                return new AccumulateRechargeService($this->group, $this->data);
-            default:
-                Log::error("ActivityManager type {$name} not supported!");
-        }
+        return $this->builder->getServiceByType($type, $this->group);
     }
 }

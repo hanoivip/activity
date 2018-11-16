@@ -11,7 +11,7 @@
 		
 			Hoạt đông: {{ $type }}, 
 			Trạng thái: {{ print_r($act) }}
-			
+			<br/>
 		@endforeach
 	@endforeach
 @else

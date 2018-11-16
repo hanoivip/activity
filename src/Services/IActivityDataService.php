@@ -16,10 +16,7 @@ interface IActivityDataService
      */
     public function getConfig($group, $type = null, $ontime = false);
     
-    /**
-     * Lấy 01 hoạt động đầu tiên đang trong thời gian hiện tại
-     * @param string $group
-     * @param string $type
-     */
-    //public function getActive($group, $type = null);
+    public function getWebGroups();
+    
+    public function getGameGroups();
 }

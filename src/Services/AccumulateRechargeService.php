@@ -2,19 +2,9 @@
 
 namespace Hanoivip\Activity\Services;
 
-use Hanoivip\Events\Game\UserRecharge;
-
 class AccumulateRechargeService extends AbstractActivityService
 {
     const TYPE_NAME = 'recharge';
-    
-    public function handle(UserRecharge $event)
-    {
-        if ($this->targetWebPlatform())
-            return;
-        $this->onUserProgress($event->uid, $event->coin,
-            isset($event->params['roleid']) ? $event->params['roleid'] : null);
-    }
     
     public function canUserGet($uid, $indexOrAmount, $role = null)
     {

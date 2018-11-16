@@ -24,10 +24,10 @@ abstract class AbstractActivityService implements IActivityLogic
      */
     protected $helper;
     
-    public function __construct($group, $data)
+    public function __construct($group)
     {
         $this->group = $group;
-        $this->activityData = $data;
+        $this->activityData = app()->make(IActivityDataService::class);
         $this->helper = new PlatformHelper();
     }
     /**
@@ -78,7 +78,7 @@ abstract class AbstractActivityService implements IActivityLogic
         return config('activity.' . $this->group . '.table');
     }
     
-    protected function targetWebPlatform()
+    /*protected function targetWebPlatform()
     {
         return strpos("web", $this->group) !== false;
     }
@@ -86,7 +86,7 @@ abstract class AbstractActivityService implements IActivityLogic
     protected function targetGamePlatform()
     {
         return strpos("game", $this->group) !== false;
-    }
+    }*/
     
     protected abstract function getType();
     
