@@ -59,11 +59,29 @@ class ArrayDataService implements IActivityDataService
         return $cfg;
     }
     
-    public function getWebGroups()
-    {}
+    public function getWebGroups($checktime = true)
+    {
+        $groups = config('activities');
+        $webs = [];
+        foreach ($groups as $group => $activities)
+        {
+            if (strpos($group, 'web') !== false)
+                $webs[$group] = $activities;
+        }
+        return $webs;
+    }
 
-    public function getGameGroups()
-    {}
+    public function getGameGroups($checktime = true)
+    {
+        $groups = config('activities');
+        $webs = [];
+        foreach ($groups as $group => $activities)
+        {
+            if (strpos($group, 'game') !== false)
+                $webs[$group] = $activities;
+        }
+        return $webs;
+    }
 
 
 }

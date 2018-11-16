@@ -8,12 +8,11 @@ class EventServiceProvider extends ServiceProvider
 {
     protected $listen = [
         'Hanoivip\Events\Game\UserRecharge' => [
-            'Hanoivip\Activity\Services\AccumulateRechargeService',
-            'Hanoivip\Activity\Services\FirstRechargeService',
+            'Hanoivip\Activity\Services\UserRechargeListener',
         ],
-        'Hanoivip\Events\Gate\UserTopup' => [
-            'Hanoivip\Activity\Services\AccumulateTopupService',
-            'Hanoivip\Activity\Services\FirstTopupService',
+        // TODO : move to events lib
+        'Hanoivip\GateClient\Events\UserTopup' => [
+            'Hanoivip\Activity\Services\UserTopupListener',
         ],
     ];
 

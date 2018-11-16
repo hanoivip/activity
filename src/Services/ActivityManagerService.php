@@ -65,6 +65,7 @@ class ActivityManagerService
         foreach ($activities as $activity)
         {
             $type = $activity['type'];
+            $aid = $activity['id'];
             $service = $this->getServiceByType($type);
             if (empty($service))
                 continue;
@@ -76,8 +77,8 @@ class ActivityManagerService
                     if (!isset($groupByRole[$role]))
                         $groupByRole[$role] = [];
                     if (!isset($groupByRole[$role][$type]))
-                        $groupByRole[$role][$type] = [];
-                    array_push($groupByRole[$role][$type], $roleActivities);
+                        $groupByRole[$role][$aid] = [];
+                    array_push($groupByRole[$role][$aid], $roleActivities);
                 }
             }
         }

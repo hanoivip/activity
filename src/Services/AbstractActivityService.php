@@ -5,6 +5,7 @@ namespace Hanoivip\Activity\Services;
 use Hanoivip\Activity\Models\Activity;
 use Hanoivip\Platform\PlatformHelper;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 abstract class AbstractActivityService implements IActivityLogic
 {
@@ -44,21 +45,25 @@ abstract class AbstractActivityService implements IActivityLogic
         $record->setTable($table);
         $record->user_id = $uid;
         $record->activity_id = $activityId;
+        $record->current_recharge = 0;
+        $record->rewards = '[]';
         if (!empty($role))
             $record->role_id = $role;
         $record->save();
         return $record;
     }
     /**
+     * Lấy bản ghi của người chơi, đối với 1 sk nhất định, với 1 nhóm nhất định
      * 
      * @param number $uid
      * @param number $activityId
      * @param string $role
      * @return Activity|NULL
      */
-    protected function getRecord($uid, $activityId, $role = null)
+    protected function getRecord1($uid, $activityId, $role = null)
     {
         $table = $this->getTableName();
+        Log::debug("{$uid} {$activityId} {$table} {$role}");
         if (empty($role))
             $record = DB::table($table)
             ->where('user_id', $uid)
@@ -73,20 +78,30 @@ abstract class AbstractActivityService implements IActivityLogic
         return $record;
     }
     
+    protected function getRecord($uid, $activityId, $role = null)
+    {
+        $table = $this->getTableName();
+        $record = new Activity();
+        $record->setTable($table);
+        $builder = $record->newQuery();
+        if (empty($role))
+        $builder
+        ->where('user_id', $uid)
+        ->where('activity_id', $activityId)
+        ->first();
+        else
+        $builder
+        ->where('user_id', $uid)
+        ->where('activity_id', $activityId)
+        ->where('role_id', $role)
+        ->first();
+        $record->que
+    }
+    
     protected function getTableName()
     {
         return config('activity.' . $this->group . '.table');
     }
-    
-    /*protected function targetWebPlatform()
-    {
-        return strpos("web", $this->group) !== false;
-    }
-    
-    protected function targetGamePlatform()
-    {
-        return strpos("game", $this->group) !== false;
-    }*/
     
     protected abstract function getType();
     

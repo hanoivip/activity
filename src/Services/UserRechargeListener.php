@@ -22,7 +22,8 @@ class UserRechargeListener
     
     public function handle(UserRecharge $event)
     {
-        $groups = $this->data->allGameGroup();
+        echo 'xxx';
+        $groups = $this->data->getGameGroups();
         foreach ($groups as $group => $activities)
         {
             foreach ($this->types as $type)

@@ -42,11 +42,10 @@ class AccumulateRechargeService extends AbstractActivityService
 
     public function onUserProgress($uid, $amount, $role = null)
     {
-        $activity = $this->activityData->getConfig($this->platform, self::TYPE_NAME, true);
-        $record = $this->getRecord($uid, $activity['id'], $role);
+        $record = $this->getRecord($uid, $this->getActiveId(), $role);
         if (empty($record))
         {
-            $record = $this->newRecord($uid, $activity['id'], $role);
+            $record = $this->newRecord($uid, $this->getActiveId(), $role);
             $record->current_recharge = $amount;
             $record->rewards = '[]';
             $record->save();

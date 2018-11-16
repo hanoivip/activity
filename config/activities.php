@@ -131,6 +131,26 @@ return [
                 ],
             ]
         ],
-        
+        2 => [
+            'id' => 2,
+            'start' => 0,
+            'end' => 0,
+            'type' => 'first_recharge',
+            'title' => '',
+            'description' => '',
+            'icon' => 0,
+            'params' => [
+                [
+                    'type' => 'Balance',
+                    'id' => 0,
+                    'count' => 10000
+                ],
+                [
+                    'type' => 'Items',
+                    'id' => 'FirstCharge',
+                    'count' => 2
+                ],
+            ]
+        ],
     ]
 ];

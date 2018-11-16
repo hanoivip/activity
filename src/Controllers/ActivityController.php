@@ -45,10 +45,9 @@ class ActivityController extends Controller
     
     private function getActivityService($group)
     {
-        $table = config('activity.' . $group . '.table');
         $platformName = config('activity.' . $group . '.platform');
         $platform = $this->platformHelper->getPlatform($platformName);
-        return new ActivityManagerService($platformName, $platform, $this->activityData);
+        return new ActivityManagerService($group, $platform, $this->activityData);
     }
     
     /**
@@ -73,10 +72,10 @@ class ActivityController extends Controller
             Log::error('Activity detail activities ex: ' . $ex->getMessage());
         }
         if ($request->ajax())
-            return ['configs' => $configs, 'activities' => $activities];
+            return ['group' => $group, 'configs' => $configs, 'activities' => $activities];
         else
             return view('hanoivip::activity-group-detail', 
-                ['configs' => $configs, 'activities' => $activities]);
+                ['group' => $group, 'configs' => $configs, 'activities' => $activities]);
     }
     
     /**

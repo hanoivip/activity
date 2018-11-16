@@ -13,10 +13,11 @@ interface IActivityDataService
      * @param string $group
      * @param string $type
      * @param boolean $ontime Có kiểm tra thời gian hay không
+     * @return array
      */
     public function getConfig($group, $type = null, $ontime = false);
     
-    public function getWebGroups();
+    public function getWebGroups($checktime = true);
     
-    public function getGameGroups();
+    public function getGameGroups($checktime = true);
 }

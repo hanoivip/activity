@@ -2,7 +2,6 @@
 
 namespace Hanoivip\Activity\Services;
 
-
 use Hanoivip\GateClient\Events\UserTopup;
 
 class UserTopupListener
@@ -23,7 +22,7 @@ class UserTopupListener
     
     public function handle(UserTopup $event)
     {
-        $groups = $this->data->allWebGroup();
+        $groups = $this->data->getWebGroups();
         foreach ($groups as $group => $activities)
         {
             foreach ($this->types as $type)
