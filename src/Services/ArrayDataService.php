@@ -56,7 +56,8 @@ class ArrayDataService implements IActivityDataService
                 }
             }
         }
-        return $cfg;
+        else
+            return $cfg;
     }
     
     public function getWebGroups($checktime = true)
@@ -65,7 +66,7 @@ class ArrayDataService implements IActivityDataService
         $webs = [];
         foreach ($groups as $group => $activities)
         {
-            if (strpos($group, 'web') !== false)
+            if ($group == 'web')
                 $webs[$group] = $activities;
         }
         return $webs;
@@ -77,7 +78,7 @@ class ArrayDataService implements IActivityDataService
         $webs = [];
         foreach ($groups as $group => $activities)
         {
-            if (strpos($group, 'game') !== false)
+            if ($group != 'web')
                 $webs[$group] = $activities;
         }
         return $webs;

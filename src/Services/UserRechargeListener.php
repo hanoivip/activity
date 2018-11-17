@@ -22,14 +22,14 @@ class UserRechargeListener
     
     public function handle(UserRecharge $event)
     {
-        echo 'xxx';
         $groups = $this->data->getGameGroups();
         foreach ($groups as $group => $activities)
         {
             foreach ($this->types as $type)
             {
                 $service = $this->builder->getServiceByType($type, $group);
-                if (!empty($service))
+                if (!empty($service) &&
+                    $service->isActive())
                 {
                     $role = null;
                     if (isset($event->params['roleid']))

@@ -123,6 +123,9 @@ class ActivityManagerService
      */
     private function getServiceByType($type)
     {
-        return $this->builder->getServiceByType($type, $this->group);
+        $service = $this->builder->getServiceByType($type, $this->group);
+        if (!empty($service) &&
+            $service->isActive())
+            return $service;
     }
 }

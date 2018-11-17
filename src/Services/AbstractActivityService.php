@@ -58,7 +58,7 @@ abstract class AbstractActivityService implements IActivityLogic
      * @param number $uid
      * @param number $activityId
      * @param string $role
-     * @return Activity|NULL
+     * @return \stdClass|NULL An instance of Activity => stdClass
      */
     protected function getRecord1($uid, $activityId, $role = null)
     {
@@ -77,7 +77,14 @@ abstract class AbstractActivityService implements IActivityLogic
             ->first();
         return $record;
     }
-    
+    /**
+     * Lấy bản ghi của người chơi, đối với 1 sk nhất định, với 1 nhóm nhất định
+     *
+     * @param number $uid
+     * @param number $activityId
+     * @param string $role
+     * @return Activity|NULL
+     */ 
     protected function getRecord($uid, $activityId, $role = null)
     {
         $table = $this->getTableName();
@@ -85,17 +92,21 @@ abstract class AbstractActivityService implements IActivityLogic
         $record->setTable($table);
         $builder = $record->newQuery();
         if (empty($role))
-        $builder
+        $record = $builder
         ->where('user_id', $uid)
         ->where('activity_id', $activityId)
         ->first();
         else
-        $builder
+        $record = $builder
         ->where('user_id', $uid)
         ->where('activity_id', $activityId)
         ->where('role_id', $role)
         ->first();
-        $record->que
+        //Log::debug(print_r($record, true));
+        //??
+        if (!empty($record))
+            $record->setTable($table);
+        return $record;
     }
     
     protected function getTableName()
@@ -110,6 +121,13 @@ abstract class AbstractActivityService implements IActivityLogic
         $type = $this->getType();
         return $this->activityData->getConfig($this->group, $type, true);
     }
+    
+    public function isActive()
+    {
+        $activity = $this->getActive();
+        return !empty($activity);
+    }
+    
     /**
      * Lấy ID hoạt động đang được kích hoạt tương ứng
      * @return number
@@ -117,6 +135,7 @@ abstract class AbstractActivityService implements IActivityLogic
     protected function getActiveId()
     {
         $activity = $this->getActive();
+        //Log::debug('.........' . print_r($activity, true) . '...' . $this->group . ' .. ' . $this->getType());
         return $activity['id'];
     }
     

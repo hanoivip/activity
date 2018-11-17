@@ -28,7 +28,8 @@ class UserTopupListener
             foreach ($this->types as $type)
             {
                 $service = $this->builder->getServiceByType($type, $group);
-                if (!empty($service))
+                if (!empty($service) &&
+                    $service->isActive())
                 {
                     $role = null;
                     if (isset($event->params['roleid']))

@@ -52,12 +52,10 @@ class AccumulateRechargeService extends AbstractActivityService
         }
         else
         {
-            $record->current_recharge += $amount;
-            $record->save();
+            $record->current_recharge = $record->current_recharge + $amount;
+            $record->update();
         }
     }
-    
-    
 
     public function getUserProgress($uid, $role = null)
     {

@@ -5,6 +5,11 @@ namespace Hanoivip\Activity\Services;
 interface IActivityLogic
 {
     /**
+     * Hiện tại có thể hiện nào đang hoạt động không
+     * @return boolean
+     */
+    public function isActive();
+    /**
      * 
      * @param number $uid
      * @param number $amount Index or Amount
