@@ -7,6 +7,7 @@ return [
             'start' => 0,
             'end' => 0,
             'type' => 'first_recharge',
+            'group' => 'web',
             'title' => '',
             'description' => '',
             'icon' => 0,
@@ -28,6 +29,7 @@ return [
             'start' => 0,
             'end' => 0,
             'type' => 'shop',
+            'group' => 'web',
             'title' => 'Web Shop',
             'description' => '',
             'icon' => 0,
@@ -50,7 +52,7 @@ return [
                     'type' => 'Items',
                     'id' => 'ItemId2',
                     'count' => 1,
-                    'price' => 10000,
+                    'price' => 20000,
                     'limit' => 0
                 ],
             ],
@@ -60,6 +62,7 @@ return [
             'start' => 0,
             'end' => 0,
             'type' => 'recharge',
+            'group' => 'web',
             'title' => 'Accumulate Recharge',
             'description' => '',
             'icon' => 0,
@@ -83,7 +86,7 @@ return [
                         'count' => 1
                     ]
                 ],
-                5000 => [
+                20000 => [
                     [
                         'type' => 'Box',
                         'id' => 'Recharge3000',
@@ -99,11 +102,12 @@ return [
             'start' => 0,
             'end' => 0,
             'type' => 'recharge',
+            'group' => 's1',
             'title' => 'Accumulate Recharge',
             'description' => '',
             'icon' => 0,
             'params' => [
-                1000 => [
+                10000 => [
                     [
                         'type' => 'Items',
                         'id' => 'Recharge1000',
@@ -115,14 +119,14 @@ return [
                         'count' => 1000
                     ]
                 ],
-                3000 => [
+                30000 => [
                     [
                         'type' => 'Items',
                         'id' => 'Recharge3000',
                         'count' => 1
                     ]
                 ],
-                5000 => [
+                500000 => [
                     [
                         'type' => 'Box',
                         'id' => 'Recharge3000',
@@ -131,26 +135,6 @@ return [
                 ],
             ]
         ],
-        2 => [
-            'id' => 2,
-            'start' => 0,
-            'end' => 0,
-            'type' => 'first_recharge',
-            'title' => '',
-            'description' => '',
-            'icon' => 0,
-            'params' => [
-                [
-                    'type' => 'Balance',
-                    'id' => 0,
-                    'count' => 10000
-                ],
-                [
-                    'type' => 'Items',
-                    'id' => 'FirstCharge',
-                    'count' => 2
-                ],
-            ]
-        ],
+        
     ]
 ];

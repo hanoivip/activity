@@ -12,9 +12,9 @@ class ArrayDataService implements IActivityDataService
 {
     protected $platformHelper;
     
-    public function __construct()
+    public function __construct(PlatformHelper $helper)
     {
-        $this->platformHelper = new PlatformHelper();
+        $this->platformHelper = $helper;
     }
     
     public function activeGroup()

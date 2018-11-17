@@ -43,12 +43,13 @@ class ActivityManagerService
     public function __construct(
         string $group, 
         IPlatform $platform,
-        IActivityDataService $data)
+        IActivityDataService $data,
+		PlatformHelper $helper)
     {
         $this->group = $group;
         $this->platform = $platform;
         $this->data = $data;
-        $this->helper = new PlatformHelper();
+        $this->helper = $helper;
         $this->builder = new ActivityBuilder();
     }
     
@@ -123,7 +124,7 @@ class ActivityManagerService
      */
     private function getServiceByType($type)
     {
-        $service = $this->builder->getServiceByType($type, $this->group);
+        $service = $this->builder->getServiceByType($type, $this->group, $this->helper);
         if (!empty($service) &&
             $service->isActive())
             return $service;

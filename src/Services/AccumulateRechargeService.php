@@ -57,23 +57,26 @@ class AccumulateRechargeService extends AbstractActivityService
         }
     }
 
-    public function getUserProgress($uid, $role = null)
+    public function getUserProgress($uid)
     {
-        if (empty($role))
-            $role = 0;
         $activity = $this->getActive();
         $progress = [];
-        foreach ($activity['params'] as $amount => $rewards)
+        $roles = $this->getRoles($uid);
+        foreach ($roles as $r)
         {
-            $index = new RewardIndex();
-            $index->amountOrIndex = $amount;
-            $index->canBuy = false;
-            $index->price = 0;
-            $index->canReceived = $this->canUserGet($uid, $amount, $role);
-            $index->received = $this->hasGotReward($uid, $amount, $role);
-            if (!isset($progress[$role]))
-                $progress[$role] = [];
-            $progress[$role][$amount] = $index;
+            $role = $r->role_id;
+            foreach ($activity['params'] as $amount => $rewards)
+            {
+                $index = new RewardIndex();
+                $index->amountOrIndex = $amount;
+                $index->canBuy = false;
+                $index->price = 0;
+                $index->canReceived = $this->canUserGet($uid, $amount, $role);
+                $index->received = $this->hasGotReward($uid, $amount, $role);
+                if (!isset($progress[$role]))
+                    $progress[$role] = [];
+                $progress[$role][$amount] = $index;
+            }
         }
         return $progress;
     }

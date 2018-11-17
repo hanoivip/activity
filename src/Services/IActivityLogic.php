@@ -22,7 +22,7 @@ interface IActivityLogic
      * @param string $role
      * @return array index => array ( role => RewardIndex )
      */
-    public function getUserProgress($uid, $role = null);
+    public function getUserProgress($uid);
     /**
      * 
      * @param number $uid

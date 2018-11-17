@@ -25,11 +25,11 @@ abstract class AbstractActivityService implements IActivityLogic
      */
     protected $helper;
     
-    public function __construct($group)
+    public function __construct($group, $helper)
     {
         $this->group = $group;
         $this->activityData = app()->make(IActivityDataService::class);
-        $this->helper = new PlatformHelper();
+        $this->helper = $helper;
     }
     /**
      * 
@@ -135,7 +135,6 @@ abstract class AbstractActivityService implements IActivityLogic
     protected function getActiveId()
     {
         $activity = $this->getActive();
-        //Log::debug('.........' . print_r($activity, true) . '...' . $this->group . ' .. ' . $this->getType());
         return $activity['id'];
     }
     
@@ -146,5 +145,23 @@ abstract class AbstractActivityService implements IActivityLogic
             return 0;
         else
             return $record->current_recharge;
+    }
+    /**
+     * Lấy tất cả các nhân vật đã tham gia vào sự kiện này
+     * @param number $uid
+     * @return number[] Role Uids. Trả về array(stdOject(0)) nếu không phân biệt nv
+     */
+    protected function getRoles($uid)
+    {
+        $table = $this->getTableName();
+        $roles = DB::table($table)
+        ->select('role_id')
+        ->where('user_id', $uid)
+        ->where('activity_id', $this->getActiveId())
+        ->distinct()
+        ->get()
+        ->toArray();
+        Log::debug("......" . print_r($roles, true));
+        return $roles;
     }
 }

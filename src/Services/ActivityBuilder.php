@@ -11,14 +11,14 @@ class ActivityBuilder
      * @param string $type
      * @return IActivityLogic
      */
-    public function getServiceByType($type, $group)
+    public function getServiceByType($type, $group, $helper)
     {
         switch ($type)
         {
             case 'first_recharge':
-                return new FirstRechargeService($group);
+                return new FirstRechargeService($group, $helper);
             case 'recharge':
-                return new AccumulateRechargeService($group);
+                return new AccumulateRechargeService($group, $helper);
             default:
                 Log::error("ActivityManager type {$type} not supported!");
         }

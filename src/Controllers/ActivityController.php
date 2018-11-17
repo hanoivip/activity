@@ -47,7 +47,7 @@ class ActivityController extends Controller
     {
         $platformName = config('activity.' . $group . '.platform');
         $platform = $this->platformHelper->getPlatform($platformName);
-        return new ActivityManagerService($group, $platform, $this->activityData);
+        return new ActivityManagerService($group, $platform, $this->activityData, $this->platformHelper);
     }
     
     /**
