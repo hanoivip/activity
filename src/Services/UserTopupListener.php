@@ -3,6 +3,8 @@
 namespace Hanoivip\Activity\Services;
 
 use Hanoivip\GateClient\Events\UserTopup;
+use Exception;
+use Hanoivip\Platform\PlatformHelper;
 
 class UserTopupListener
 {
@@ -21,22 +23,35 @@ class UserTopupListener
     }
     
     public function handle(UserTopup $event)
-    {
-        $groups = $this->data->getWebGroups();
-        foreach ($groups as $group => $activities)
+    {   
+        try
         {
-            foreach ($this->types as $type)
+            $groups = $this->data->getWebGroups();
+            foreach ($groups as $group => $activities)
             {
-                $service = $this->builder->getServiceByType($type, $group);
-                if (!empty($service) &&
-                    $service->isActive())
+                foreach ($this->types as $type)
                 {
-                    $role = null;
-                    if (isset($event->params['roleid']))
-                        $role = $event->params['roleid'];
-                    $service->onUserProgress($event->uid, $event->coin, $role);
+                    $cfg = $this->data->getConfig($this->group, $type, true);
+                    if (empty($cfg))
+                    {
+                        Log::debug("Activity type {$type} not active atm!");
+                        continue;
+                    }
+                    $service = $this->builder->getServiceByType($type, $group, $this->helper, $cfg);
+                    if (!empty($service) &&
+                        $service->isActive())
+                    {
+                        $role = null;
+                        if (isset($event->params['roleid']))
+                            $role = $event->params['roleid'];
+                            $service->onUserProgress($event->uid, $event->coin, $role);
+                    }
                 }
             }
+        }
+        catch (Exception $ex)
+        {
+            Log::error("Activity process UserRecharge event error!");
         }
     }
 }
