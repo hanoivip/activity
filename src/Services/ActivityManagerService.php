@@ -4,6 +4,7 @@ namespace Hanoivip\Activity\Services;
 
 use Hanoivip\Platform\Contracts\IPlatform;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Log;
 use Hanoivip\Platform\PlatformHelper;
 
 /**
@@ -61,13 +62,20 @@ class ActivityManagerService
     public function detail($user)
     {
         $uid = $user->getAuthIdentifier();
-        $activities = $this->data->getConfig($this->group);
+        $activities = $this->data->getConfig($this->group, null, true);
         $groupByRole = [];
         foreach ($activities as $activity)
         {
             $type = $activity['type'];
             $aid = $activity['id'];
-            $service = $this->getServiceByType($type);
+            /*$cfg = $this->data->getConfig($this->group, $type, true);
+            if (empty($cfg))
+            {
+                Log::debug("Activity type {$type} not active atm!");
+                continue;
+            }*/
+            //Log::debug(print_r($cfg, true));
+            $service = $this->getServiceByType($type, $activity);
             if (empty($service))
                 continue;
             $detail = $service->getUserProgress($uid);
@@ -114,7 +122,9 @@ class ActivityManagerService
         // Request to platforms
         $rewards = $cfg['params'][$index];
         foreach ($rewards as $reward)
+        {
             $this->helper->sendReward($this->platform, $user, $reward, 'ActivityReward', $role);
+        }
         // Save
         $service->onGetReward($user->getAuthIdentifier(), $index, $role);
         return true;
@@ -123,13 +133,13 @@ class ActivityManagerService
     /**
      * 
      * @param string $type
+     * @param array $cfg
      * @return IActivityLogic
      */
-    private function getServiceByType($type)
+    private function getServiceByType($type, $cfg)
     {
-        $service = $this->builder->getServiceByType($type, $this->group, $this->helper);
-        if (!empty($service) &&
-            $service->isActive())
+        $service = $this->builder->getServiceByType($type, $this->group, $this->helper, $cfg);
+        if (!empty($service))
             return $service;
     }
 }

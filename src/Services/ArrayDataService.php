@@ -2,6 +2,7 @@
 
 namespace Hanoivip\Activity\Services;
 use Hanoivip\Platform\PlatformHelper;
+use Carbon\Carbon;
 
 /**
  * Config activity by php arrays
@@ -47,9 +48,9 @@ class ArrayDataService implements IActivityDataService
                         $detail['start'] > 0 && 
                         $detail['end'] > 0)
                     {
-                        $now = date();
+                        $now = Carbon::now()->getTimestamp();
                         if ($now >= $detail['start'] && $now < $detail['end'])
-                            return detail;
+                            return $detail;
                     }
                     else
                         return $detail;

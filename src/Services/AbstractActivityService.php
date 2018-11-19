@@ -16,20 +16,17 @@ abstract class AbstractActivityService implements IActivityLogic
     protected $group;
     /**
      * 
-     * @var IActivityDataService
-     */
-    protected $activityData;
-    /**
-     * 
      * @var PlatformHelper
      */
     protected $helper;
+
+    protected $activityCfg;
     
-    public function __construct($group, $helper)
+    public function __construct($group, $helper, $cfg)
     {
         $this->group = $group;
-        $this->activityData = app()->make(IActivityDataService::class);
         $this->helper = $helper;
+        $this->activityCfg = $cfg;
     }
     /**
      * 
@@ -43,12 +40,13 @@ abstract class AbstractActivityService implements IActivityLogic
         $table = $this->getTableName();
         $record = new Activity();
         $record->setTable($table);
-        $record->user_id = $uid;
-        $record->activity_id = $activityId;
+        $record->user_id = intval($uid);
+        $record->activity_id = intval($activityId);
         $record->current_recharge = 0;
-        $record->rewards = '[]';
+        $record->rewards = strval("[]");
+        $record->data = strval("");
         if (!empty($role))
-            $record->role_id = $role;
+            $record->role_id = intval($role);
         $record->save();
         return $record;
     }
@@ -118,14 +116,7 @@ abstract class AbstractActivityService implements IActivityLogic
     
     protected function getActive()
     {
-        $type = $this->getType();
-        return $this->activityData->getConfig($this->group, $type, true);
-    }
-    
-    public function isActive()
-    {
-        $activity = $this->getActive();
-        return !empty($activity);
+        return $this->activityCfg;
     }
     
     /**
@@ -161,7 +152,7 @@ abstract class AbstractActivityService implements IActivityLogic
         ->distinct()
         ->get()
         ->toArray();
-        // Log::debug("......" . print_r($roles, true));
+        //Log::debug("......" . print_r($roles, true));
         return $roles;
     }
     
@@ -176,4 +167,25 @@ abstract class AbstractActivityService implements IActivityLogic
         $record->save();
         return;
     }
+    
+    // Init record for each roles
+    public function getUserProgress($uid)
+    {
+        $roles = $this->getRoles($uid);
+        if (empty($roles))
+        {
+            $this->newRecord($uid, $this->getActive(), 0);
+        }
+        else
+            foreach ($roles as $r)
+            {
+                $role = $r->role_id;
+                $record = $this->getRecord($uid, $this->getActiveId(), $role);
+                if (empty($record))
+                    $this->newRecord($uid, $this->getActiveId(), $role);
+            }
+        return $this->onGetUserProgress($uid);
+    }
+    
+    public abstract function onGetUserProgress($uid);
 }

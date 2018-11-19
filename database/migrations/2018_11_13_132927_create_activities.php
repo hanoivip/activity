@@ -15,6 +15,7 @@ class CreateActivities extends Migration
             $table->integer('role_id')->default(0);
             $table->integer('current_recharge')->default(0);
             $table->string('rewards')->default('')->comment('Các mốc đã được thưởng');
+            $table->string('data')->default('')->comment('Dữ liệu đa dụng');
             $table->timestamps();
         });
     }

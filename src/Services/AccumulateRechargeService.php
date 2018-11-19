@@ -57,7 +57,7 @@ class AccumulateRechargeService extends AbstractActivityService
         }
     }
 
-    public function getUserProgress($uid)
+    public function onGetUserProgress($uid)
     {
         $activity = $this->getActive();
         $progress = [];
