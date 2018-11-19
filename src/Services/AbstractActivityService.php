@@ -161,7 +161,19 @@ abstract class AbstractActivityService implements IActivityLogic
         ->distinct()
         ->get()
         ->toArray();
-        Log::debug("......" . print_r($roles, true));
+        // Log::debug("......" . print_r($roles, true));
         return $roles;
+    }
+    
+    public function onGetReward($uid, $index, $role)
+    {
+        $record = $this->getRecord($uid, $this->getActiveId(), $role);
+        $rewards = [];
+        if (!empty($record))
+            $rewards = json_decode($record->rewards, true);
+        $rewards[$index] = 1;
+        $record->rewards = json_encode($rewards);
+        $record->save();
+        return;
     }
 }

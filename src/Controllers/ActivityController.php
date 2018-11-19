@@ -105,9 +105,9 @@ class ActivityController extends Controller
             $error = __('activity.reward.exception');
         }
         if ($request->ajax())
-            return [ 'result' => $result, 'error' => $error];
+            return [ 'group' => $group, 'result' => $result, 'error' => $error];
         else
-            return view('hanoivip::activity-reward', [ 'result' => $result, 'error' => $error]);
+            return view('hanoivip::activity-reward', [ 'group' => $group, 'result' => $result, 'error' => $error]);
     }
     
     /**

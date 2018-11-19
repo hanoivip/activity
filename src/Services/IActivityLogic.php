@@ -41,4 +41,6 @@ interface IActivityLogic
      * @param number $index
      */
     public function canUserBuy($uid, $index, $role = null);
+    
+    public function onGetReward($uid, $index, $role);
 }

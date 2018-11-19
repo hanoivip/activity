@@ -12,16 +12,18 @@ return [
             'description' => '',
             'icon' => 0,
             'params' => [
-                [
-                    'type' => 'Balance',
-                    'id' => 0,
-                    'count' => 10000
-                ],
-                [
-                    'type' => 'Items',
-                    'id' => 'FirstCharge',
-                    'count' => 2
-                ],
+                0 => [
+                    [
+                        'type' => 'Balance',
+                        'id' => 0,
+                        'count' => 10000
+                    ],
+                    [
+                        'type' => 'Items',
+                        'id' => 'FirstCharge',
+                        'count' => 2
+                    ],
+                ]
             ]
         ],
         2 => [
@@ -110,13 +112,13 @@ return [
                 10000 => [
                     [
                         'type' => 'Items',
-                        'id' => 'Recharge1000',
+                        'id' => 'OpenVLUS1',
                         'count' => 1
                     ],
                     [
                         'type' => 'Balance',
                         'id' => '0',
-                        'count' => 1000
+                        'count' => 20000
                     ]
                 ],
                 30000 => [

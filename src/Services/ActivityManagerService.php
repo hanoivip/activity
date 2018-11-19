@@ -111,9 +111,12 @@ class ActivityManagerService
             return false;
         }
         $cfg = $this->data->getConfig($this->group, $type);
+        // Request to platforms
         $rewards = $cfg['params'][$index];
         foreach ($rewards as $reward)
-            $this->helper->sendReward($this->platform, $reward);
+            $this->helper->sendReward($this->platform, $user, $reward, 'ActivityReward', $role);
+        // Save
+        $service->onGetReward($user->getAuthIdentifier(), $index, $role);
         return true;
     }
     

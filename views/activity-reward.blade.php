@@ -4,7 +4,7 @@
 
 @section('content')
 
-@if (empty($error))
+@if (!empty($error))
 <p>Lỗi: {{ $error }}</p>
 @endif
 
@@ -13,5 +13,7 @@
 @else
 <p>{{ __('activity.reward.fail') }}</p>
 @endif
+
+<a href="{{ route('activity.detail', ['group' => $group]) }}">Quay lại</a>
 
 @endsection
