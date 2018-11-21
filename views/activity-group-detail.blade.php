@@ -12,9 +12,10 @@
 			
 			Tiêu đề: {{ $title = $configs[$aid]['title'] }},<br/>
 			Mô tả: {{ $title = $configs[$aid]['description'] }},<br/>
+			Chú ý: {{ $rule = $configs[$aid]['rule'] }},<br/>
 			@if ($configs[$aid]['end'] > 0)
-			Bắt đầu: {{ $title = $configs[$aid]['start'] }}
-			Kết thúc: {{ $title = $configs[$aid]['end'] }}
+			Bắt đầu: {{ $start = date('H:i:s d/m/Y', $configs[$aid]['start']) }}
+			Kết thúc: {{ $end = date('H:i:s d/m/Y', $configs[$aid]['end'] - 1) }}
 			@endif
 
 			@foreach ($act[0] as $amount => $index)

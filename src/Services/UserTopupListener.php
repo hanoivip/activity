@@ -5,6 +5,7 @@ namespace Hanoivip\Activity\Services;
 use Hanoivip\GateClient\Events\UserTopup;
 use Exception;
 use Hanoivip\Platform\PlatformHelper;
+use Illuminate\Support\Facades\Log;
 
 class UserTopupListener
 {
@@ -31,15 +32,14 @@ class UserTopupListener
             {
                 foreach ($this->types as $type)
                 {
-                    $cfg = $this->data->getConfig($this->group, $type, true);
+                    $cfg = $this->data->getConfig($group, $type, true);
                     if (empty($cfg))
                     {
                         Log::debug("Activity type {$type} not active atm!");
                         continue;
                     }
                     $service = $this->builder->getServiceByType($type, $group, $this->helper, $cfg);
-                    if (!empty($service) &&
-                        $service->isActive())
+                    if (!empty($service))
                     {
                         $role = null;
                         if (isset($event->params['roleid']))
@@ -51,7 +51,7 @@ class UserTopupListener
         }
         catch (Exception $ex)
         {
-            Log::error("Activity process UserRecharge event error!");
+            Log::error("Activity process UserTopup event error! Ex:" . $ex->getMessage());
         }
     }
 }

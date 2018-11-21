@@ -113,7 +113,10 @@ class ActivityManagerService
      */
     public function reward($user, $type, $index, $role = null)
     {
-        $service = $this->getServiceByType($type);
+        $cfg = $this->data->getConfig($this->group, $type, true);
+        if (empty($cfg))
+            return false;
+        $service = $this->getServiceByType($type, $cfg);
         if (!$service->canUserGet($user->getAuthIdentifier(), $index, $role))
         {
             return false;

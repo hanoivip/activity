@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['web', 'auth:web'])->namespace('Hanoivip\Activity\Controllers')->prefix('user')->group(function () {
     Route::get('/activity', function () {
         return redirect()->route('activity.group');
-    });
+    })->name('activity');
     // Liệt kê tất cả các group đang được kích hoạt hiện tại
     Route::get('/activity/group', 'ActivityController@listGroup')->name('activity.group');
     // Liệt kê/cập nhật các hoạt động của người chơi đối với 1 group cụ thể

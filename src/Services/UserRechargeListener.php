@@ -36,15 +36,14 @@ class UserRechargeListener
             {
                 foreach ($this->types as $type)
                 {
-                    $cfg = $this->data->getConfig($this->group, $type, true);
+                    $cfg = $this->data->getConfig($group, $type, true);
                     if (empty($cfg))
                     {
                         Log::debug("Activity type {$type} not active atm!");
                         continue;
                     }
                     $service = $this->builder->getServiceByType($type, $group, $this->helper, $cfg);
-                    if (!empty($service) &&
-                        $service->isActive())
+                    if (!empty($service))
                     {
                         $role = null;
                         if (isset($event->params['roleid']))
@@ -56,7 +55,7 @@ class UserRechargeListener
         }
         catch (Exception $ex)
         {
-            Log::error("Activity process UserRecharge event error!");
+            Log::error("Activity process UserRecharge event error! Ex:" . $ex->getMessage());
         }
     }
 }
