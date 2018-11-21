@@ -68,13 +68,6 @@ class ActivityManagerService
         {
             $type = $activity['type'];
             $aid = $activity['id'];
-            /*$cfg = $this->data->getConfig($this->group, $type, true);
-            if (empty($cfg))
-            {
-                Log::debug("Activity type {$type} not active atm!");
-                continue;
-            }*/
-            //Log::debug(print_r($cfg, true));
             $service = $this->getServiceByType($type, $activity);
             if (empty($service))
                 continue;

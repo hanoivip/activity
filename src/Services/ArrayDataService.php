@@ -58,7 +58,25 @@ class ArrayDataService implements IActivityDataService
             }
         }
         else
-            return $cfg;
+        {
+            $out = [];
+            foreach ($cfg as $id => $detail)
+            {
+                {
+                    if ($ontime &&
+                        $detail['start'] > 0 &&
+                        $detail['end'] > 0)
+                    {
+                        $now = Carbon::now()->getTimestamp();
+                        if ($now >= $detail['start'] && $now < $detail['end'])
+                            $out[] = $detail;
+                    }
+                    else
+                        $out[] = $detail;
+                }
+            }
+            return $out;
+        }
     }
     
     public function getWebGroups($checktime = true)
