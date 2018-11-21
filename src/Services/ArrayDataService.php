@@ -69,10 +69,10 @@ class ArrayDataService implements IActivityDataService
                     {
                         $now = Carbon::now()->getTimestamp();
                         if ($now >= $detail['start'] && $now < $detail['end'])
-                            $out[] = $detail;
+                            $out[$id] = $detail;
                     }
                     else
-                        $out[] = $detail;
+                        $out[$id] = $detail;
                 }
             }
             return $out;
