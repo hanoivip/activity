@@ -5,11 +5,11 @@ namespace Hanoivip\Activity\Controllers;
 use Hanoivip\Activity\Services\ActivityManagerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Exception;
 use Hanoivip\Activity\Services\IActivityDataService;
 use Hanoivip\Platform\PlatformHelper;
-use Hanoivip\Activity\Services\ArrayDataService;
 
 class ActivityController extends Controller
 {
@@ -91,18 +91,28 @@ class ActivityController extends Controller
         $user = Auth::user();
         $result = false;
         $error = null;
+        $lock = "Activity" . $user->getAuthIdentifier();
+        $role = null;
+        if ($request->has('role'))
+            $role = $request->input('role');
         try
         {
-            $role = null;
-            if ($request->has('role'))
-                $role = $request->input('role');
+            if (!Cache::lock($lock, 120)->get())
+            {
+                return view('hanoivip::activity-reward', 
+                    ['group' => $group, 'result' => $result, 'error' => __('hanoivip::activity.reward.too-fast')]);
+            }
             $service = $this->getActivityService($group);
             $result = $service->reward($user, $type, $index, $role);
         }
         catch (Exception $ex)
         {
             Log::error('Activity get rewards ex: ' . $ex->getMessage());
-            $error = __('activity.reward.exception');
+            $error = __('hanoivip::activity.reward.exception');
+        }
+        finally 
+        {
+            Cache::lock($lock)->release();
         }
         if ($request->ajax())
             return [ 'group' => $group, 'result' => $result, 'error' => $error];

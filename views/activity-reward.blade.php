@@ -9,9 +9,9 @@
 @endif
 
 @if ($result)
-<p>{{ __('activity.reward.success') }}</p>
+<p>{{ __('hanoivip::activity.reward.success') }}</p>
 @else
-<p>{{ __('activity.reward.fail') }}</p>
+<p>{{ __('hanoivip::activity.reward.fail') }}</p>
 @endif
 
 <a href="{{ route('activity.detail', ['group' => $group]) }}">Quay lại</a>

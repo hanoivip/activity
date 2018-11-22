@@ -4,7 +4,6 @@ namespace Hanoivip\Activity\Services;
 
 use Hanoivip\Platform\Contracts\IPlatform;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Support\Facades\Log;
 use Hanoivip\Platform\PlatformHelper;
 
 /**
