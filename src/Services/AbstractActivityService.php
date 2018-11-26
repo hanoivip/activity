@@ -187,5 +187,36 @@ abstract class AbstractActivityService implements IActivityLogic
         return $this->onGetUserProgress($uid);
     }
     
+    /**
+     *
+     * @param number $uid
+     * @return array index => array ( role => RewardIndex )
+     */
     public abstract function onGetUserProgress($uid);
+    
+    public function canUserGet($uid, $indexOrAmount, $role = null)
+    {
+        $record = $this->getRecord($uid, $this->getActiveId(), $role);
+        if (empty($record))
+            return false;
+        $rewards = json_decode($record->rewards, true);
+        if (!empty($rewards))
+        {
+            return isset($rewards[$indexOrAmount]);
+        }
+        return false;
+    }
+    
+    public function hasGotReward($uid, $indexOrAmount, $role = null)
+    {
+        $record = $this->getRecord($uid, $this->getActiveId(), $role);
+        if (empty($record))
+            return false;
+        $rewards = json_decode($record->rewards, true);
+        if (!empty($rewards))
+        {
+            return isset($rewards[$indexOrAmount]);
+        }
+        return false;
+    }
 }

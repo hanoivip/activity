@@ -2,12 +2,12 @@
 
 namespace Hanoivip\Activity\Services;
 
-use Hanoivip\GateClient\Events\UserTopup;
 use Exception;
-use Hanoivip\Platform\PlatformHelper;
 use Illuminate\Support\Facades\Log;
+use Hanoivip\Events\UserLogin;
+use Hanoivip\Platform\PlatformHelper;
 
-class UserTopupListener
+class UserLoginListener
 {
     protected $data;
     
@@ -15,7 +15,7 @@ class UserTopupListener
     
     protected $helper;
     
-    protected $types = ['recharge', 'first_recharge'];
+    protected $types = ['login'];
     
     public function __construct(
         IActivityDataService $data,
@@ -27,7 +27,7 @@ class UserTopupListener
         $this->helper = $helper;
     }
     
-    public function handle(UserTopup $event)
+    public function handle(UserLogin $event)
     {   
         try
         {
@@ -45,17 +45,14 @@ class UserTopupListener
                     $service = $this->builder->getServiceByType($type, $group, $this->helper, $cfg);
                     if (!empty($service))
                     {
-                        $role = null;
-                        if (isset($event->params['roleid']))
-                            $role = $event->params['roleid'];
-                            $service->onUserProgress($event->uid, $event->coin, $role);
+                        $service->onUserProgress($event->uid, 0);
                     }
                 }
             }
         }
         catch (Exception $ex)
         {
-            Log::error("Activity process UserTopup event error! Ex:" . $ex->getMessage());
+            Log::error("Activity process UserLogin event error! Ex:" . $ex->getMessage());
         }
     }
 }

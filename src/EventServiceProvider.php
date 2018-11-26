@@ -14,6 +14,9 @@ class EventServiceProvider extends ServiceProvider
         'Hanoivip\GateClient\Events\UserTopup' => [
             'Hanoivip\Activity\Services\UserTopupListener',
         ],
+        'Hanoivip\Events\UserLogin' => [
+            'Hanoivip\Activity\Services\UserLoginListener',
+        ],
     ];
 
     public function boot()

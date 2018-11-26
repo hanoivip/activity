@@ -4,6 +4,7 @@ namespace Hanoivip\Activity\Services;
 
 use Hanoivip\Platform\Contracts\IPlatform;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Log;
 use Hanoivip\Platform\PlatformHelper;
 
 /**
@@ -62,6 +63,7 @@ class ActivityManagerService
     {
         $uid = $user->getAuthIdentifier();
         $activities = $this->data->getConfig($this->group, null, true);
+        //Log::debug("........." . print_r($activities, true));
         $groupByRole = [];
         foreach ($activities as $activity)
         {
@@ -73,6 +75,7 @@ class ActivityManagerService
             $detail = $service->getUserProgress($uid);
             if (!empty($detail))
             {
+                Log::debug("........." . $aid);
                 foreach ($detail as $role => $roleActivities)
                 {
                     if (!isset($groupByRole[$role]))

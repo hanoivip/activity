@@ -21,6 +21,8 @@ class ActivityBuilder
                 return new AccumulateRechargeService($group, $helper, $cfg);
             case 'sale_recharge':
                 return new SaleService($group, $helper, $cfg);
+            case 'login':
+                return new LoginService($group, $helper, $cfg);
             default:
                 Log::error("ActivityManager type {$type} not supported!");
         }
