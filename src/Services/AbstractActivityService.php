@@ -152,7 +152,7 @@ abstract class AbstractActivityService implements IActivityLogic
         ->distinct()
         ->get()
         ->toArray();
-        //Log::debug("......" . print_r($roles, true));
+        //Log::debug("Roles:......" . print_r($roles, true));
         return $roles;
     }
     
@@ -174,7 +174,7 @@ abstract class AbstractActivityService implements IActivityLogic
         $roles = $this->getRoles($uid);
         if (empty($roles))
         {
-            $this->newRecord($uid, $this->getActive(), 0);
+            $this->newRecord($uid, $this->getActiveId(), 0);
         }
         else
             foreach ($roles as $r)
