@@ -63,7 +63,7 @@ class ActivityManagerService
     {
         $uid = $user->getAuthIdentifier();
         $activities = $this->data->getConfig($this->group, null, true);
-        Log::debug("........." . print_r($activities, true));
+        // Log::debug("........." . print_r($activities, true));
         $groupByRole = [];
         foreach ($activities as $activity)
         {
@@ -116,8 +116,8 @@ class ActivityManagerService
         {
             return false;
         }
-        $cfg = $this->data->getConfig($this->group, $type);
         // Request to platforms
+        // Log::debug("....." . print_r($cfg, true));
         $rewards = $cfg['params'][$index];
         foreach ($rewards as $reward)
         {

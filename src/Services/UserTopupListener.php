@@ -15,7 +15,7 @@ class UserTopupListener
     
     protected $helper;
     
-    protected $types = ['recharge', 'first_recharge'];
+    protected $types = ['recharge', 'first_recharge', 'sale_recharge'];
     
     public function __construct(
         IActivityDataService $data,
@@ -28,7 +28,7 @@ class UserTopupListener
     }
     
     public function handle(UserTopup $event)
-    {   
+    {
         try
         {
             $groups = $this->data->getWebGroups();
@@ -48,7 +48,7 @@ class UserTopupListener
                         $role = null;
                         if (isset($event->params['roleid']))
                             $role = $event->params['roleid'];
-                            $service->onUserProgress($event->uid, $event->coin, $role);
+                        $service->onUserProgress($event->uid, $event->coin, $role);
                     }
                 }
             }
